@@ -1,0 +1,8 @@
+Resultados para Documento (Texto) (documento_texto.png):
+
+   Kernel Contraste (Desv. Padrão) Nitidez (Var. Laplaciano)
+ Original                    48.02                  10011.54
+Média 3x3                    34.72                    609.35
+Média 5x5                    30.06                    139.72
+Média 9x9                    25.45                     32.87
+
