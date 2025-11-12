@@ -1,0 +1,33 @@
+Arquivo,Ruído,Filtro,MSE,PSNR (dB)
+documento,Gaussiano,N/A (Ruído),0.001535,28.14
+documento,Gaussiano,Media,0.001219,29.14
+documento,Gaussiano,Mediana,0.001043,29.82
+documento,Gaussiano,Gaussiano,0.002284,26.41
+documento,SalEPimenta,N/A (Ruído),0.013391,18.73
+documento,SalEPimenta,Media,0.002637,25.79
+documento,SalEPimenta,Mediana,0.000845,30.73
+documento,SalEPimenta,Gaussiano,0.002743,25.62
+natureza,Gaussiano,N/A (Ruído),0.001529,28.16
+natureza,Gaussiano,Media,0.006337,21.98
+natureza,Gaussiano,Mediana,0.006110,22.14
+natureza,Gaussiano,Gaussiano,0.009627,20.17
+natureza,SalEPimenta,N/A (Ruído),0.014456,18.40
+natureza,SalEPimenta,Media,0.008023,20.96
+natureza,SalEPimenta,Mediana,0.006086,22.16
+natureza,SalEPimenta,Gaussiano,0.010287,19.88
+pessoa,Gaussiano,N/A (Ruído),0.001532,28.15
+pessoa,Gaussiano,Media,0.000302,35.20
+pessoa,Gaussiano,Mediana,0.000355,34.50
+pessoa,Gaussiano,Gaussiano,0.000440,33.57
+pessoa,SalEPimenta,N/A (Ruído),0.015620,18.06
+pessoa,SalEPimenta,Media,0.002029,26.93
+pessoa,SalEPimenta,Mediana,0.000089,40.50
+pessoa,SalEPimenta,Gaussiano,0.001073,29.69
+urbana,Gaussiano,N/A (Ruído),0.001514,28.20
+urbana,Gaussiano,Media,0.003456,24.61
+urbana,Gaussiano,Mediana,0.003307,24.81
+urbana,Gaussiano,Gaussiano,0.005527,22.58
+urbana,SalEPimenta,N/A (Ruído),0.015750,18.03
+urbana,SalEPimenta,Media,0.005242,22.81
+urbana,SalEPimenta,Mediana,0.003168,24.99
+urbana,SalEPimenta,Gaussiano,0.006247,22.04

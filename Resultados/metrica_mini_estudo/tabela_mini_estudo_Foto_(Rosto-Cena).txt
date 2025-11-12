@@ -1,8 +1,8 @@
-Resultados para Foto (Rosto/Cena) (file.png):
+Resultados para Foto (Rosto/Cena) (pessoa.jpg):
 
    Kernel Contraste (Desv. Padrão) Nitidez (Var. Laplaciano)
- Original                    86.84                    670.97
-Média 3x3                    86.04                     69.89
-Média 5x5                    85.35                     20.65
-Média 9x9                    84.17                      5.33
+ Original                    62.07                     85.77
+Média 3x3                    61.77                     19.13
+Média 5x5                    61.44                      6.73
+Média 9x9                    60.82                      2.63
 

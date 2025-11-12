@@ -17,8 +17,8 @@ def calcular_nitidez(img_gray):
     return laplaciano.var()
 
 
-FOTO_ARQUIVO = "file.png"
-DOC_ARQUIVO = "documento_texto.png"
+FOTO_ARQUIVO = "pessoa.jpg"
+DOC_ARQUIVO = "documento.jpg"
 INPUT_DIR = "imgs" 
 
 KERNEL_SIZES = [3, 5, 9]
