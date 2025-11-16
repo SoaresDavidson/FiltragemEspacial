@@ -7,6 +7,15 @@ import matplotlib.pyplot as plt
 import os
 import time
 
+# Obtém o caminho absoluto do diretório onde o script está
+DIRETORIO_SCRIPT = os.path.dirname(os.path.abspath(__file__))
+# Assume que a estrutura é .../PDI/FiltragemEspacial/
+DIRETORIO_RAIZ_PDI = os.path.dirname(DIRETORIO_SCRIPT)
+
+print(f"Caminho do diretório raiz PDI: {DIRETORIO_RAIZ_PDI}")
+print(f"Caminho do diretório de script: {DIRETORIO_SCRIPT}")
+
+
 # --- Funções de Convolução ---
 
 def aplicar_convolucao_manual(imagem_entrada, kernel):
@@ -42,11 +51,23 @@ def aplicar_convolucao_manual(imagem_entrada, kernel):
             imagem_saida[y, x] = valor
             
     return imagem_saida
-for filename in os.listdir('imgs'):
+
+# Criar diretório de saída antes do loop
+DIRETORIO_SAIDA = os.path.join(DIRETORIO_SCRIPT, 'Resultados', 'convolucao_manual')
+os.makedirs(DIRETORIO_SAIDA, exist_ok=True)
+
+DIRETORIO_ENTRADA = os.path.join(DIRETORIO_SCRIPT, 'imgs')
+
+for filename in os.listdir(DIRETORIO_ENTRADA):
+    # Verifica se é uma imagem válida
+    if not filename.lower().endswith(('.png', '.jpg', '.jpeg', '.tif', '.tiff', '.bmp')):
+        print(f"Pulando arquivo: {filename} (não é imagem)")
+        continue
+        
     # --- Configurações ---
-    NOME_ARQUIVO_IMAGEM = filename
-    DIRETORIO_ENTRADA = "imgs" 
-    caminho_completo_imagem = os.path.join(DIRETORIO_ENTRADA, NOME_ARQUIVO_IMAGEM)
+    caminho_completo_imagem = os.path.join(DIRETORIO_ENTRADA, filename)
+    
+    print(f"\n=== Processando: {filename} ===")
 
     # 1. Definição dos Kernels Manuais 3x3
     # Kernel da Média 3x3: Suavização (todos os pesos iguais, somam 1)
@@ -103,23 +124,18 @@ for filename in os.listdir('imgs'):
     imagem_laplaciano_norm = cv2.normalize(imagem_laplaciano_float, None, 0, 255, cv2.NORM_MINMAX)
     imagem_laplaciano_uint8 = np.uint8(imagem_laplaciano_norm)
 
-    # --- Visualização ---
-    fig, axes = plt.subplots(1, 3, figsize=(18, 6))
-    ax = axes.ravel()
-
-    ax[0].imshow(imagem_cinza, cmap='gray')
-    ax[0].set_title("1. Imagem Original (Cinza)")
-    ax[0].axis('off')
-
-    ax[1].imshow(imagem_media_uint8, cmap='gray')
-    ax[1].set_title(f"2. Média 3x3 (Convolução Manual)")
-    ax[1].axis('off')
-
-    ax[2].imshow(imagem_laplaciano_uint8, cmap='gray')
-    ax[2].set_title(f"3. Laplaciano 3x3 (Bordas Normalizado)")
-    ax[2].axis('off')
-
-    plt.tight_layout()
-    os.makedirs('Resultados/convolução_manual', exist_ok=True)
-    plt.savefig(f'Resultados//convolução_manual/media_{filename}')
-    plt.show()
+    # --- Salvamento Individual ---
+    base_name = os.path.splitext(filename)[0]
+    
+    path_original = os.path.join(DIRETORIO_SAIDA, f'{base_name}_original.png')
+    path_media = os.path.join(DIRETORIO_SAIDA, f'{base_name}_media_3x3.png')
+    path_laplaciano = os.path.join(DIRETORIO_SAIDA, f'{base_name}_laplaciano_3x3.png')
+    
+    cv2.imwrite(path_original, imagem_cinza)
+    cv2.imwrite(path_media, imagem_media_uint8)
+    cv2.imwrite(path_laplaciano, imagem_laplaciano_uint8)
+    
+    print(f"✓ Salvos em {DIRETORIO_SAIDA}:")
+    print(f"  - {os.path.basename(path_original)}")
+    print(f"  - {os.path.basename(path_media)}")
+    print(f"  - {os.path.basename(path_laplaciano)}")
