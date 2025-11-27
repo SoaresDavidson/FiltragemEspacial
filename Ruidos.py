@@ -8,7 +8,7 @@ from scipy.ndimage import gaussian_filter
 import pandas as pd
 
 DIR_IMGS = "imgs"
-DIR_RESULTADOS = "Resultados/resultados_analise" 
+DIR_RESULTADOS = "Resultados/filtros/resultados_analise" 
 TAMANHO_KERNEL = 3
 SIGMA_GAUSSIANO = 1.6
 

@@ -1,6 +1,6 @@
 #Unsharp masking, High boost, Laplaciano
 import skimage as ski
-
+import cv2
 from skimage.color import rgb2gray
 import matplotlib.pyplot as plt
 import os
@@ -16,29 +16,24 @@ for filename in os.listdir("imgs"):
     img_laplace = ski.filters.laplace(img)
     # Adicionar 0.5 e clipar entre 0 e 1 para visualização correta
     img_laplace_127 = np.clip(img_laplace + 0.5, 0, 1)
-    img_high_boost = img + 2.5 * img_nitido
+    img_high_boost = img + 1.5 * img_laplace
 
 
-    # Plotar a imagem
-    fig, axes = plt.subplots(1, 5, figsize=(20, 8))
-    axes[0].imshow(img, cmap='gray')
-    axes[0].set_title(f'{filename}')
-    axes[0].axis('off')  
-
-    axes[1].imshow(img_nitido, cmap='gray')
-    axes[1].set_title(f'{filename} - Nitido (Unsharp Mask)')
-    axes[1].axis('off')  
-
-    axes[2].imshow(img_laplace, cmap='gray')
-    axes[2].set_title(f'{filename} - Laplaciano')
-    axes[2].axis('off')  
-
-    axes[3].imshow(img_laplace_127, cmap='gray', vmin=0.5, vmax=1)
-    axes[3].set_title(f'{filename} - Laplaciano + 127')
-    axes[3].axis('off')  
-
-    axes[4].imshow(img_high_boost, cmap='gray')
-    axes[4].set_title(f'{filename} - High Boost')
-    axes[4].axis('off')  
-
-    plt.show()
+    # Salvamento Individual
+    os.makedirs('Resultados/filtros/realce', exist_ok=True)
+    base_name = os.path.splitext(filename)[0]
+    
+    # Converter para uint8 para salvar
+    img_uint8 = (img * 255).astype(np.uint8)
+    img_nitido_uint8 = np.clip(img_nitido * 255, 0, 255).astype(np.uint8)
+    img_laplace_uint8 = np.clip((img_laplace + 1) * 127.5, 0, 255).astype(np.uint8)
+    img_laplace_127_uint8 = np.clip(img_laplace_127 * 255, 0, 255).astype(np.uint8)
+    img_high_boost_uint8 = np.clip(img_high_boost * 255, 0, 255).astype(np.uint8)
+    
+    cv2.imwrite(f'Resultados/filtros/realce/{base_name}_original.png', img_uint8)
+    cv2.imwrite(f'Resultados/filtros/realce/{base_name}_nitido.png', img_nitido_uint8)
+    cv2.imwrite(f'Resultados/filtros/realce/{base_name}_laplaciano.png', img_laplace_uint8)
+    cv2.imwrite(f'Resultados/filtros/realce/{base_name}_laplaciano_127.png', img_laplace_127_uint8)
+    cv2.imwrite(f'Resultados/filtros/realce/{base_name}_high_boost.png', img_high_boost_uint8)
+    
+    print(f"Salvo: {base_name} - 5 imagens de realce")

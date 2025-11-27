@@ -43,7 +43,7 @@ def mediana_adaptativa(img, max_ksize=9, min_ksize=3):
 
 
 
-diretorio_imgs = "Resultados/suavizacao"
+diretorio_imgs = "Resultados\\filtros\\suavizacao"
 kernel_sizes = [3, 5, 7]
 sigma_values = [0.8, 1.6]
 MAX_AMF_KSIZE = 9
@@ -51,11 +51,8 @@ FIG_WIDTH = 15
 FIG_HEIGHT_PER_ROW = 5
 
 
-if not os.path.exists(diretorio_imgs):
-    os.makedirs(diretorio_imgs)
-    print(f"Diretório de saída '{diretorio_imgs}' criado.")
-else:
-    print(f"Diretório de saída '{diretorio_imgs}' já existe.")
+
+os.makedirs(diretorio_imgs, exist_ok=True)
 
 for filename in os.listdir("imgs"):
     filepath = os.path.join("imgs", filename)
@@ -86,50 +83,33 @@ for filename in os.listdir("imgs"):
 
             for k in kernel_sizes:
                 blurred = cv2.blur(img_proc, (k, k))
+                cv2.imwrite(f'resultados\\filtros\\suavizacao\\Media_{k}x{k}.png', blurred)
                 groups["Media"].append((f"Media_{k}x{k}", blurred))
 
             for s in sigma_values:
                 blurred = cv2.GaussianBlur(img_proc, (0, 0), s)
                 s_str = str(s).replace('.', '')
+                cv2.imwrite(f'resultados/filtros/suavizacao/Gaussiano_S{s_str}.png', blurred)
                 groups["Gaussiano"].append((f"Gaussiano_S{s_str}", blurred))
 
             for k in kernel_sizes:
                 blurred = cv2.medianBlur(img_proc, k)
+                cv2.imwrite(f'resultados\\filtros\\suavizacao\\Mediana_{k}x{k}.png', blurred)
                 groups["Mediana_e_Adaptativo"].append((f"Mediana_{k}x{k}", blurred))
 
             print(f" -> Aplicando Mediana Adaptativa (Max K={MAX_AMF_KSIZE})...")
             img_MA = mediana_adaptativa(img_proc, max_ksize=MAX_AMF_KSIZE)
             groups["Mediana_e_Adaptativo"].append((f"Mediana_Adaptativa_Max{MAX_AMF_KSIZE}", img_MA))
             
+            # Salva cada imagem individualmente com cv2.imwrite
             for group_name, results in groups.items():
-                num_results = len(results)
-                
-                cols = 3
-                rows = int(math.ceil(num_results / cols))
-                
-                fig, axes = plt.subplots(rows, cols, figsize=(FIG_WIDTH, rows * FIG_HEIGHT_PER_ROW)) 
-                fig.suptitle(f"Filtros {group_name.replace('_', ' ')} vs. Original: {filename}", fontsize=16, fontweight='bold')
-                
-                ax_flat = axes.flatten()
-                
-                for i, (title, img_out) in enumerate(results):
-                    ax = ax_flat[i]
-                    ax.imshow(img_out, cmap='gray')
-                    ax.set_title(title.replace('_', ' '), fontsize=12)
-                    ax.axis('off')
-
-                for j in range(num_results, len(ax_flat)):
-                    fig.delaxes(ax_flat[j])
-
-                plt.tight_layout(rect=[0, 0.03, 1, 0.96])
-                
-                output_filename = f"{base_name}_Grupo_{group_name}.png"
-                output_filepath = os.path.join(diretorio_imgs, output_filename)
-                
-                plt.savefig(output_filepath)
-                plt.close(fig) 
-                
-                print(f" -> Grupo '{group_name}' salvo em: {output_filename}")
+                for title, img_out in results:
+                    output_filename = f"{base_name}_{title}.jpg"
+                    output_filepath = os.path.join(diretorio_imgs, output_filename)
+                    print(output_filename)
+                    cv2.imwrite(output_filepath, img_out)
+                    print(output_filepath)
+                    print(f" -> Salvo: {output_filename}")
 
         except Exception as e:
             print(f"Erro ao processar {filename}: {e}")

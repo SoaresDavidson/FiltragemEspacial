@@ -36,36 +36,29 @@ for filename in os.listdir("imgs"):
             thresh = filters.threshold_otsu(borda_sobel)
             borda_sobel_otsu = borda_sobel > thresh 
 
-            fig, axes = plt.subplots(nrows=2, ncols=3, figsize=(15, 10), sharex=True, sharey=True)
-            ax = axes.ravel()
-
-            fig.suptitle(f"Detecção de Bordas - {filename}", fontsize=16)
-
-            ax[0].imshow(img_original)
-            ax[0].set_title("Original")
-
-            ax[1].imshow(img_gray, cmap=plt.cm.gray)
-            ax[1].set_title("Escala de Cinza")
-
-            ax[2].imshow(borda_sobel, cmap=plt.cm.gray)
-            ax[2].set_title("Sobel (Gradiente)")
-
-            ax[3].imshow(borda_prewitt, cmap=plt.cm.gray)
-            ax[3].set_title("Prewitt (Gradiente)")
-
-            ax[4].imshow(borda_sobel_otsu, cmap=plt.cm.gray)
-            ax[4].set_title("Sobel + Otsu (Binarizado)")
-
-            ax[5].imshow(borda_canny, cmap=plt.cm.gray)
-            ax[5].set_title("Canny (Referência)")
-
-            for a in ax:
-                a.axis('off')
-
-            plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-            os.makedirs('Resultados/bordas', exist_ok=True)
-            plt.savefig(f'Resultados//bordas/borda_{filename}')
-            plt.show()
+            # Salvamento Individual
+            os.makedirs('Resultados/filtros/bordas', exist_ok=True)
+            base_name = os.path.splitext(filename)[0]
+            
+            # Converter para uint8 para salvar
+            img_gray_uint8 = (img_gray * 255).astype(np.uint8)
+            borda_sobel_uint8 = (borda_sobel * 255).astype(np.uint8)
+            borda_prewitt_uint8 = (borda_prewitt * 255).astype(np.uint8)
+            borda_sobel_otsu_uint8 = (borda_sobel_otsu * 255).astype(np.uint8)
+            borda_canny_uint8 = (borda_canny * 255).astype(np.uint8)
+            
+            if img_original.ndim == 3:
+                cv2.imwrite(f'Resultados/bordas/{base_name}_original.png', cv2.cvtColor(img_original, cv2.COLOR_RGB2BGR))
+            else:
+                cv2.imwrite(f'Resultados/bordas/{base_name}_original.png', img_original)
+            
+            cv2.imwrite(f'Resultados/filtros/bordas/{base_name}_cinza.png', img_gray_uint8)
+            cv2.imwrite(f'Resultados/filtros/bordas/{base_name}_sobel.png', borda_sobel_uint8)
+            cv2.imwrite(f'Resultados/filtros/bordas/{base_name}_prewitt.png', borda_prewitt_uint8)
+            cv2.imwrite(f'Resultados/filtros/bordas/{base_name}_sobel_otsu.png', borda_sobel_otsu_uint8)
+            cv2.imwrite(f'Resultados/filtros/bordas/{base_name}_canny.png', borda_canny_uint8)
+            
+            print(f"Salvo: {base_name} - 6 imagens de detecção de bordas")
 
         except Exception as e:
             print(f"Erro ao processar {filename}: {e}")
